@@ -3,9 +3,13 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
-use App\DataTables\UsersDataTable;
 use Intervention\Image\ImageManagerStatic;
-use App\Helpers\ImageFilter;
+use App\Http\Controllers\CartController;
+use App\Models\Post;
+use Laravel\Socialite\Facades\Socialite;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use App\DataTables\UsersDataTable;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,6 +37,15 @@ Route::get('image', function(){
     $img ->filter(new ImageFilter(100));
     return $img->response();
 });
+
+Route::get('shop', [CartController::class,'shop'])->name('shop');
+Route::get('cart', [CartController::class,'cart'])->name('cart');
+Route::get('add-to-cart/{product_id}',[CartController::class,'addToCart'])->name('add-to-cart');
+
+Route::get('qty-increment/{rowId}',[CartController::class,'qtyIncrement'])->name('qty-increment');
+Route::get('qty-decrement/{rowId}',[CartController::class,'qtyDecrement'])->name('qty-decrement');
+Route::get('remove-product/{rowId}',[CartController::class,'removeProduct'])->name('remove-product');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
