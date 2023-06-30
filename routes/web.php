@@ -46,6 +46,35 @@ Route::get('qty-increment/{rowId}',[CartController::class,'qtyIncrement'])->name
 Route::get('qty-decrement/{rowId}',[CartController::class,'qtyDecrement'])->name('qty-decrement');
 Route::get('remove-product/{rowId}',[CartController::class,'removeProduct'])->name('remove-product');
 
+Route::get('create-role',function(){
+    // $role = Role::create(['name' => 'publisher']);
+    // return $role;
+    // $permission = Permission::create(['name' => 'edit articles']);
+    // return $permission;
+    $user = auth()->user();
+
+//    $user->givePermissionTo('edit articles');
+
+    // Adding permissions via a role
+    // $user->assignRole('writer');
+    if($user->can('edit articles')){
+        return 'user have permissions';
+    }else{
+        return 'user dont have permissions';
+    }
+});
+
+Route::get('posts', function(){
+    //auth()->user()->assignRole('writer');
+    $posts = Post::all();
+    return view('post.post', compact('posts'));
+});
+
+
+
+
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
